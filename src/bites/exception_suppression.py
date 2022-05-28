@@ -16,6 +16,4 @@ def _raise_exception():
 if __name__ == "__main__":
     with ignore(ValueError, TypeError):
         _raise_exception()
-    print("Exception was ignored")
-
-    # 'Exception was ignored'
+    print("Exception was ignored")  # 'Exception was ignored'
