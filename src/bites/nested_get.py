@@ -8,6 +8,6 @@ def nested_get(dict_, keys):
 
 if __name__ == "__main__":
     nested_dict = {"school": {"students": {"name": "Kieran"}}}
-    keys = ("school", "students", "name")
-    print(nested_get(nested_dict, keys))
+    name = nested_get(nested_dict, ("school", "students", "name"))
+    print(name)
     # 'Kieran'
