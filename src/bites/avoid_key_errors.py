@@ -17,40 +17,46 @@ assignments can be made without an existing key.
 from collections import defaultdict
 
 
-class ContractorAccounts:
-    def __init__(self, contractors=None):
-        self.contractors = {} if contractors is None else contractors
+def pay_create_assign(db, contractor: str, amount: int) -> None:
+    """Creates account entry if none existing, then assign."""
+    if contractor not in db:
+        db[contractor] = 0
 
-    def pay_create_assign(self, contractor, amount) -> None:
-        """Creates account entry if none existing, then assigns."""
-        if contractor not in self.contractors:
-            self.contractors[contractor] = 0
+    db[contractor] += amount
 
-        self.contractors[contractor] += amount
 
-    def pay_default_assign(self, contractor, amount):
-        """Gets a default if no existing account, then assigns."""
-        current_amount = self.contractors.get(contractor, 0)
+def pay_create_assign(db, contractor: str, amount: int) -> None:
+    """Creates account entry if none exists; assigns otherwise."""
+    if contractor not in db:
+        db[contractor] = amount
+    else:
+        db[contractor] += amount
 
-        self.contractors[contractor] = current_amount + amount
 
-    def pay_assigns(self, contractor, amount):
-        """Assigns."""
-        self.contractors[contractor] += amount
+def pay_default_assign(db, contractor: str, amount: int) -> None:
+    """Gets a default if no existing account, then assign."""
+    current_amount = db.get(contractor, 0)
+
+    db[contractor] = current_amount + amount
+
+
+def pay_assigns(db: defaultdict, contractor: str, amount: int) -> None:
+    """Assign."""
+    db[contractor] += amount
 
 
 if __name__ == "__main__":
-    db = ContractorAccounts()
-    db.pay_create_assign(contractor="Kieran LTD", amount=2000)
-    db.pay_create_assign(contractor="Kieran LTD", amount=4500)
-    print(db.contractors["Kieran LTD"])  # 6500
+    db = {}
+    pay_create_assign(db, contractor="Kieran LTD", amount=2000)
+    pay_create_assign(db, contractor="Kieran LTD", amount=4500)
+    print(db["Kieran LTD"])  # 6500
 
-    db = ContractorAccounts()
-    db.pay_default_assign(contractor="Kieran LTD", amount=2000)
-    db.pay_default_assign(contractor="Kieran LTD", amount=4500)
-    print(db.contractors["Kieran LTD"])  # 6500
+    db = {}
+    pay_default_assign(db, contractor="Kieran LTD", amount=2000)
+    pay_default_assign(db, contractor="Kieran LTD", amount=4500)
+    print(db["Kieran LTD"])  # 6500
 
-    db = ContractorAccounts(defaultdict(int))  # Default declared as `int` (0)
-    db.pay_assigns(contractor="Kieran LTD", amount=2000)
-    db.pay_assigns(contractor="Kieran LTD", amount=4500)
-    print(db.contractors["Kieran LTD"])  # 6500
+    db = defaultdict(int)
+    pay_assigns(db, "Kieran LTD", amount=2000)
+    pay_assigns(db, "Kieran LTD", amount=4500)
+    print(db["Kieran LTD"])  # 6500
