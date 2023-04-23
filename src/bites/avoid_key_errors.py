@@ -17,15 +17,7 @@ assignments can be made without an existing key.
 from collections import defaultdict
 
 
-def pay_create_assign(db, contractor: str, amount: int) -> None:
-    """Creates account entry if none existing, then assign."""
-    if contractor not in db:
-        db[contractor] = 0
-
-    db[contractor] += amount
-
-
-def pay_create_assign(db, contractor: str, amount: int) -> None:
+def pay_create_assign(db: defaultdict | dict, contractor: str, amount: int) -> None:
     """Creates account entry if none exists; assigns otherwise."""
     if contractor not in db:
         db[contractor] = amount
@@ -33,7 +25,7 @@ def pay_create_assign(db, contractor: str, amount: int) -> None:
         db[contractor] += amount
 
 
-def pay_default_assign(db, contractor: str, amount: int) -> None:
+def pay_default_assign(db: defaultdict | dict, contractor: str, amount: int) -> None:
     """Gets a default if no existing account, then assign."""
     current_amount = db.get(contractor, 0)
 
